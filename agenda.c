@@ -6,18 +6,20 @@
 
 void *pBuffer;
 
-typedef struct var{
-	int op,i,cont,a;
-}variavel;
-
 typedef struct nom{
     char pessoa[20];
 }nome;
 
+typedef struct var{
+	int op,i,j,cont,a;
+	nome atual;
+}variavel;
+
 void incluir(variavel *inicio);
-void apagar();
+void apagar(variavel *inicio);
 void buscar(variavel *inicio);
 void listar(variavel *inicio);
+void insertionSort();
 
 int main(void)
 {
@@ -41,7 +43,7 @@ int main(void)
 				incluir(inicio);
             break;
             case 2:
-                apagar();
+                apagar(inicio);
             break;
             case 3:
                 buscar(inicio);
@@ -70,10 +72,21 @@ void incluir(variavel *inicio){
 	scanf("%s",pessoa->pessoa);
 	
 	inicio->cont++;
+	
+	insertionSort(inicio);
 }
 
-void apagar(){
-	printf("teste\n");
+void apagar(variavel *inicio){
+	if(inicio->cont >= 0){
+		if((pBuffer = realloc(pBuffer,sizeof(variavel) + (((inicio->cont-1) * sizeof(nome)))))== NULL){
+			printf("Memória insufuciente!");
+			exit(1);
+		}
+		inicio->cont--;
+	}
+	else{
+		printf("Não há nomes na lista para remover!");
+	}
 }
 
 void buscar(variavel *inicio){
@@ -111,4 +124,17 @@ void listar(variavel *inicio){
 		pessoa++;
 		}
 	printf("\n");
+}
+void insertionSort(variavel *inicio){
+	nome *dado;
+	dado = pBuffer + sizeof(variavel);
+	if(inicio->cont > 1){
+		for (inicio->i = 1; inicio->i < inicio->cont; inicio->i++) {
+			inicio->atual = dado[inicio->i];
+			for (inicio->j = inicio->i - 1; (inicio->j >= 0) && (strcmp(dado[inicio->j].pessoa,inicio->atual.pessoa) == 1); inicio->j--) {
+				dado[inicio->j + 1] = dado[inicio->j];
+			}
+			dado[inicio->j+1] = inicio->atual;
+		}
+	}
 }
