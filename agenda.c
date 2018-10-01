@@ -19,7 +19,7 @@ void incluir(variavel *inicio);
 void apagar(variavel *inicio);
 void buscar(variavel *inicio);
 void listar(variavel *inicio);
-void insertionSort();
+void insertionSort(variavel *inicio);
 
 int main(void)
 {
@@ -77,7 +77,7 @@ void incluir(variavel *inicio){
 }
 
 void apagar(variavel *inicio){
-	if(inicio->cont >= 0){
+	if(inicio->cont > 0){
 		if((pBuffer = realloc(pBuffer,sizeof(variavel) + (((inicio->cont-1) * sizeof(nome)))))== NULL){
 			printf("Memória insufuciente!");
 			exit(1);
@@ -85,7 +85,7 @@ void apagar(variavel *inicio){
 		inicio->cont--;
 	}
 	else{
-		printf("Não há nomes na lista para remover!");
+		printf("Não há nomes na lista para remover!\n");
 	}
 }
 
@@ -130,11 +130,13 @@ void insertionSort(variavel *inicio){
 	dado = pBuffer + sizeof(variavel);
 	if(inicio->cont > 1){
 		for (inicio->i = 1; inicio->i < inicio->cont; inicio->i++) {
-			inicio->atual = dado[inicio->i];
+			strcpy(inicio->atual.pessoa,dado[inicio->i].pessoa);
 			for (inicio->j = inicio->i - 1; (inicio->j >= 0) && (strcmp(dado[inicio->j].pessoa,inicio->atual.pessoa) == 1); inicio->j--) {
-				dado[inicio->j + 1] = dado[inicio->j];
+				strcpy(dado[inicio->j + 1].pessoa,dado[inicio->j].pessoa);
+				printf("teste\n");
 			}
-			dado[inicio->j+1] = inicio->atual;
+			strcpy(dado[inicio->j+1].pessoa,inicio->atual.pessoa);
+			printf("teste1\n");
 		}
 	}
 }
