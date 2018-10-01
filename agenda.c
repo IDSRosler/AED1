@@ -11,8 +11,8 @@ typedef struct nom{
 }nome;
 
 typedef struct var{
-	int op,i,j,cont,a;
-	nome atual;
+	int op,i,j,cont,a,min_id;
+	nome atual,min;
 }variavel;
 
 void incluir(variavel *inicio);
@@ -20,6 +20,7 @@ void apagar(variavel *inicio);
 void buscar(variavel *inicio);
 void listar(variavel *inicio);
 void insertionSort(variavel *inicio);
+void selectionSort(variavel *inicio);
 
 int main(void)
 {
@@ -73,7 +74,8 @@ void incluir(variavel *inicio){
 	
 	inicio->cont++;
 	
-	insertionSort(inicio);
+	//insertionSort(inicio);
+	selectionSort(inicio);
 }
 
 void apagar(variavel *inicio){
@@ -130,13 +132,28 @@ void insertionSort(variavel *inicio){
 	dado = pBuffer + sizeof(variavel);
 	if(inicio->cont > 1){
 		for (inicio->i = 1; inicio->i < inicio->cont; inicio->i++) {
-			strcpy(inicio->atual.pessoa,dado[inicio->i].pessoa);
-			for (inicio->j = inicio->i - 1; (inicio->j >= 0) && (strcmp(dado[inicio->j].pessoa,inicio->atual.pessoa) == 1); inicio->j--) {
-				strcpy(dado[inicio->j + 1].pessoa,dado[inicio->j].pessoa);
-				printf("teste\n");
+			inicio->atual = dado[inicio->i];
+			for (inicio->j = inicio->i - 1; (inicio->j >= 0) && inicio->atual.pessoa < dado[inicio->j].pessoa; inicio->j--) {
+				dado[inicio->j + 1] = dado[inicio->j];
 			}
-			strcpy(dado[inicio->j+1].pessoa,inicio->atual.pessoa);
-			printf("teste1\n");
+			dado[inicio->j+1] = inicio->atual;
 		}
 	}
+}
+void selectionSort(variavel *inicio){ 
+	nome *dado;
+	dado = pBuffer + sizeof(variavel);
+	inicio->min_id = 0;
+	for (inicio->i=0; inicio->i<inicio->cont-1; inicio->i++) { 
+		 inicio->min = dado[inicio->i]; 
+		 for (inicio->j=inicio->i+1; inicio->j<inicio->cont; inicio->j++) 
+		   if (dado[inicio->j].pessoa[0] < inicio->min.pessoa[0]) { 
+			 inicio->min = dado[inicio->j]; 
+			 inicio->min_id = inicio->j; 
+			 } 
+		 inicio->atual = dado[inicio->i]; 
+		 dado[inicio->i] = dado[inicio->min_id]; 
+		 dado[inicio->min_id] = inicio->atual;
+		 inicio->min_id = inicio->i+1;
+  }
 }
