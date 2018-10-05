@@ -21,6 +21,8 @@ void buscar(variavel *inicio);
 void listar(variavel *inicio);
 void insertionSort(variavel *inicio);
 void selectionSort(variavel *inicio);
+void bubbleSort(variavel *inicio);
+void quicksort(int left,int right,variavel *inicio);
 
 int main(void)
 {
@@ -75,7 +77,9 @@ void incluir(variavel *inicio){
 	inicio->cont++;
 	
 	//insertionSort(inicio);
-	selectionSort(inicio);
+	//selectionSort(inicio);
+	//bubbleSort(inicio);
+	quicksort(0,inicio->cont-1,inicio);
 }
 
 void apagar(variavel *inicio){
@@ -133,7 +137,7 @@ void insertionSort(variavel *inicio){
 	if(inicio->cont > 1){
 		for (inicio->i = 1; inicio->i < inicio->cont; inicio->i++) {
 			inicio->atual = dado[inicio->i];
-			for (inicio->j = inicio->i - 1; (inicio->j >= 0) && inicio->atual.pessoa < dado[inicio->j].pessoa; inicio->j--) {
+			for (inicio->j = inicio->i - 1; (inicio->j >= 0) && inicio->atual.pessoa[0] < dado[inicio->j].pessoa[0]; inicio->j--) {
 				dado[inicio->j + 1] = dado[inicio->j];
 			}
 			dado[inicio->j+1] = inicio->atual;
@@ -156,4 +160,41 @@ void selectionSort(variavel *inicio){
 		 dado[inicio->min_id] = inicio->atual;
 		 inicio->min_id = inicio->i+1;
   }
+}
+void bubbleSort(variavel *inicio){
+	nome *dado;
+	dado = pBuffer + sizeof(variavel);
+	for (inicio->i = 0; inicio->i < inicio->cont - 1; inicio->i++){
+             for (inicio->j = (inicio->i+1); inicio->j < inicio->cont; inicio->j++){
+                  if (dado[inicio->j].pessoa[0] < dado[inicio->i].pessoa[0]){
+                       inicio->atual = dado[inicio->i];
+                       dado[inicio->i] = dado[inicio->j];
+                       dado[inicio->j] = inicio->atual;
+                  }
+              }
+        }
+}
+void quicksort(int left,int right,variavel *inicio){
+	nome *dado;
+	dado = pBuffer + sizeof(variavel);
+	inicio->i = left; 
+	inicio->j = right; 
+	inicio->min = dado[(left + right)/2]; 
+	do { 
+		while(dado[inicio->i].pessoa[0] < inicio->min.pessoa[0]) 
+			inicio->i++; 
+		while(inicio->min.pessoa[0] < dado[inicio->j].pessoa[0]) 
+			inicio->j--; 
+		if (inicio->i <= inicio->j) { 
+		inicio->atual = dado[inicio->i]; 
+		dado[inicio->i] = dado[inicio->j]; 
+		dado[inicio->j] = inicio->atual; 
+		inicio->i++; 
+		inicio->j--; 
+		}
+	} while (inicio->i <= inicio->j); 
+	if (left < inicio->j) 
+		quicksort(left,inicio->j,inicio); 
+	if (inicio->i < right) 
+		quicksort(inicio->i,right,inicio); 
 }
