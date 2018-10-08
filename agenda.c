@@ -11,7 +11,7 @@ typedef struct nom{
 }nome;
 
 typedef struct var{
-	int op,i,j,cont,a,min_id;
+	int op,i,j,cont,a,min_id,comeco,fim;
 	nome atual,min;
 }variavel;
 
@@ -70,7 +70,7 @@ void incluir(variavel *inicio){
         exit(1);
 	}
 	pessoa = pBuffer + sizeof(variavel) + (inicio->cont * sizeof(nome)) ;
-	
+	esquerda
 	printf("Digite o nome: ");
 	scanf("%s",pessoa->pessoa);
 	
@@ -197,4 +197,43 @@ void quicksort(int left,int right,variavel *inicio){
 		quicksort(left,inicio->j,inicio); 
 	if (inicio->i < right) 
 		quicksort(inicio->i,right,inicio); 
+}
+void merge(variavel *inicio){
+    int com1 = comeco, com2 = meio+1, comAux = 0, tam = fim-comeco+1;
+    int *vetAux;
+    vetAux = (int*)malloc(tam * sizeof(int));
+    while(com1 <= meio && com2 <= fim){
+        if(vetor[com1] < vetor[com2]) {
+            vetAux[comAux] = vetor[com1];
+            com1++;
+        } else {
+            vetAux[comAux] = vetor[com2];
+            com2++;
+        }
+        comAux++;
+    }
+    while(com1 <= meio){  //Caso ainda haja elementos na primeira metade
+        vetAux[comAux] = vetor[com1];
+        comAux++;
+        com1++;
+    }
+    while(com2 <= fim) {   //Caso ainda haja elementos na segunda metade
+        vetAux[comAux] = vetor[com2];
+        comAux++;
+        com2++;
+    }
+    for(comAux = comeco; comAux <= fim; comAux++){    //Move os elementos de volta para o vetor original
+        vetor[comAux] = vetAux[comAux-comeco];
+    }
+    free(vetAux);
+}
+void mergeSort(int comeco, int fim, variavel *inicio){
+	inicio->comeco = comeco;
+	inicio->fim = fim;
+    if (inicio->comeco < inicio->fim) {
+        inicio->a = (inicio->fim + inicio->comeco)/2;
+        mergeSort(inicio->comeco, inicio->a, inicio);
+        mergeSort(inicio->meio+1, inicio->fim, inicio);
+        merge(inicio->comeco, inicio->meio, inicio->fim, inicio);
+	}
 }
